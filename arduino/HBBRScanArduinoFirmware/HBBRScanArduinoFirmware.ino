@@ -1,4 +1,4 @@
-// HBBRScan - http://combinatorialdesign/designs/HBBR_Scanner
+// HBBRScan - http://combinatorialdesign.com/designs/HBBR_Scanner
 //
 // compatible wih
 //
