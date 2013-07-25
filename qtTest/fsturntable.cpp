@@ -3,7 +3,8 @@
 
 FSTurntable::FSTurntable()
 {
-    degreesPerStep = 360.0f/200.0f/16.0f; //the size of a microstep
+    degreesPerStep = 0.0176f; //the size of a microstep
+///    degreesPerStep = 360.0f/200.0f/16.0f; //the size of a microstep
     direction = FS_DIRECTION_CW;
     rotation = FSMakePoint(0.0f, 0.0f, 0.0f);
 }

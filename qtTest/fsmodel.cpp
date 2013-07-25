@@ -165,6 +165,7 @@ void FSModel::convertPointCloudToSurfaceMesh2()
     //pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudPoisson;
     //pcl::PolygonMesh surfaceMesh;
     //pcl::PolygonMesh surfaceMeshPoisson;
+    cout << endl << "conerting point cloud to surface mesh" << endl;
     boost::filesystem::path p;
     p = boost::filesystem::current_path();
 

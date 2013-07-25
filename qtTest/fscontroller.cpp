@@ -2,18 +2,14 @@
 #include "fsdialog.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/core.hpp>
 #include <QFuture>
 #include <QtConcurrent/QtConcurrentRun>
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
 
 using namespace std;
-using namespace cv;
 
 FSController* FSController::singleton=0;
-
-FSConfiguration* FSController::config = new FSConfiguration();
 
 FSController::FSController()
 {
@@ -26,7 +22,6 @@ FSController::FSController()
     turntable = new FSTurntable();
     laser = new FSLaser();
     vision = new FSVision();
-
     scanning = false;
     //all in degrees; (only when stepper is attached to laser)
     laserSwipeMin = 30; //18

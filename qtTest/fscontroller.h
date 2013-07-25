@@ -11,11 +11,9 @@
 #include "fsturntable.h"
 #include "fslaser.h"
 #include "fsvision.h"
-#include "fsconfiguration.h"
 
 class GeometryEngine;
 class FSModel;
-class FSController;
 /*class FSSerial;
 class FSWebCam;
 class MainWindow;
@@ -27,6 +25,7 @@ class FSController
         static FSController* singleton;
         FSController();
 
+
     public:
         MainWindow* mainwindow;
         FSControlPanel* controlPanel;
@@ -37,8 +36,6 @@ class FSController
         FSTurntable* turntable;
         FSLaser* laser;
         FSVision* vision;
-
-        static FSConfiguration* config;
 
         //Singleton Pattern
         static FSController* getInstance();
@@ -62,6 +59,10 @@ class FSController
         double laserStepSize;
         double turntableStepSize;
         double yDpi;
+
+public slots:
+        void readConfiguration();
+
 };
 
 #endif // FSCONTROLLER_H

@@ -28,8 +28,7 @@ SOURCES += main.cpp\
     fslaser.cpp \
     fsturntable.cpp \
     fsvision.cpp \
-    fswebcam.cpp \
-    fsconfiguration.cpp
+    fswebcam.cpp
 
 HEADERS  += mainwindow.h \
     geometryengine.h \
@@ -45,8 +44,7 @@ HEADERS  += mainwindow.h \
     fsgeometries.h \
     fslaser.h \
     fsvision.h \
-    fsturntable.h \
-    fsconfiguration.h
+    fsturntable.h
 
 FORMS    += mainwindow.ui \
     fsdialog.ui \
@@ -62,8 +60,10 @@ RESOURCES += \
 
 macx {
     message("Buildng for Mac.")
-    INCLUDEPATH += /usr/local/Cellar/opencv/2.4.2/include
-    LIBS += -L/usr/local/Cellar/opencv/2.4.2 \
+#    INCLUDEPATH += /usr/local/Cellar/opencv/2.4.2/include
+#    LIBS += -L/usr/local/Cellar/opencv/2.4.2
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L/usr/local/lib \
     -lopencv_core \
     -lopencv_highgui \
     -lopencv_imgproc \
@@ -82,14 +82,16 @@ macx {
     #-lvtkFiltering \
     #-lvtksys
 
-    INCLUDEPATH += /usr/local/include/pcl-1.7
+    INCLUDEPATH += /usr/local/include/
+    #INCLUDEPATH += /usr/local/include/pcl-1.7
+    INCLUDEPATH += /usr/local/include/pcl-1.6
     LIBS += -L/usr/local/lib \
     -lpcl_common \
     -lpcl_io \
     -lpcl_io_ply \
     -lpcl_sample_consensus \
     -lpcl_octree \
-    -lpcl_ml \
+#    -lpcl_ml \
     -lpcl_filters \
     -lpcl_kdtree \
     -lpcl_registration \
@@ -100,13 +102,13 @@ macx {
 
     #INCLUDEPATH += /usr/local/Cellar/vtk/5.10.0/include/vtk-5.10
 
-    INCLUDEPATH += /usr/local/Cellar/eigen/3.1.2/include/eigen3
+    INCLUDEPATH += /usr/local/Cellar/eigen/3.1.1/include/eigen3
     INCLUDEPATH += /usr/local/Cellar/flann/1.7.1/include
-    INCLUDEPATH += /usr/local/Cellar/boost/1.51.0/include/boost
+    INCLUDEPATH += /usr/local/Cellar/boost/1.50.0/include/boost
 
-        LIBS += -L/usr/local/Cellar/boost/1.51.0 \
+        LIBS += -L/usr/local/Cellar/boost/1.50.0 \
         -lboost_chrono-mt \
-        -lboost_context-mt \
+#        -lboost_context-mt \
         -lboost_date_time-mt \
         -lboost_exception-mt \
         -lboost_filesystem-mt \
@@ -141,20 +143,8 @@ linux-g++ {
     #CONFIG += link_pkgconfig
     #PKGCONFIG += opencv
     #INCLUDEPATH += /usr/local/include/opencv2/
-    INCLUDEPATH += /usr/include/boost/
-
-    LIBS += -L/usr/lib/ \
-     -lboost_system \
-     -lboost_filesystem \
-
-    DEFINES += LINUX
 
     INCLUDEPATH += /usr/include/eigen3/
-    INCLUDEPATH += /usr/include/boost/
-
-    LIBS += -L/usr/lib/ \
-     -lboost_system \
-     -lboost_filesystem \
 
     LIBS += -L/usr/local/lib/ \
     -lopencv_core \

@@ -9,8 +9,8 @@ FSWebCam::FSWebCam()
 {
     info.portName = "";
     info.friendlyName = "";
-    info.sizeX = FSController::config->CAM_IMAGE_WIDTH;
-    info.sizeY = FSController::config->CAM_IMAGE_HEIGHT;
+    info.sizeX = CAM_IMAGE_WIDTH;
+    info.sizeY = CAM_IMAGE_HEIGHT;
     isCapturingImage=false;
     camera=0;
     imageCapture=0;
@@ -26,12 +26,7 @@ cv::Mat FSWebCam::getFrame()
 {
     frameTaken = false;
     isCapturingImage = true;
-
-    #ifdef LINUX
-    imageCapture->capture();
-    #else
     imageCapture->capture("./");
-    #endif
     //qDebug() << "preparing to take frame";
     //wait until camera has taken picture, then return
     while(!frameTaken){
@@ -43,9 +38,7 @@ cv::Mat FSWebCam::getFrame()
 
 FSPoint FSWebCam::getPosition()
 {
-    return FSMakePoint(FSController::config->CAM_POS_X,
-                       FSController::config->CAM_POS_Y,
-                       FSController::config->CAM_POS_Z);
+    return FSMakePoint(CAM_POS_X, CAM_POS_Y, CAM_POS_Z);
 }
 
 void FSWebCam::setCamera(const QByteArray &cameraDevice)
@@ -62,13 +55,8 @@ void FSWebCam::setCamera(const QByteArray &cameraDevice)
         qDebug() << imageCapture->supportedResolutions();
         qDebug() << imageSettings.resolution();
     //QImageEncoderSettings imageSettings;
-
-    #ifdef LINUX
-    #else
     imageSettings.setCodec("image/jpeg");
     imageSettings.setResolution(1280, 960);
-    #endif
-
     imageCapture->setEncodingSettings(imageSettings);
 
     camera->setViewfinder(FSController::getInstance()->controlPanel->ui->viewfinder );
@@ -120,11 +108,7 @@ void FSWebCam::imageSaved(int id, const QString &fileName)
                 img2.width(),
                 CV_8UC3,
                 (uchar*)img2.bits(), img2.bytesPerLine());
-    #ifdef LINUX
-    frame = mat.clone();
-    #else
     frame = mat;
-    #endif
     cv::cvtColor(mat,frame, CV_RGB2BGR);
     frameTaken = true;
     isCapturingImage = false;

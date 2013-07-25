@@ -57,8 +57,8 @@ void GeometryEngine::initPointCloud()
 
 void GeometryEngine::setPointCloudTo(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointcloud)
 {
-    VertexData vertices[pointcloud->points.size()];
-    //VertexData vertices[9999];
+   VertexData* vertices= new VertexData[pointcloud->points.size()]; // Clang does not like this
+///    VertexData vertices[99999];
     GLuint indices[pointcloud->points.size()];
 
     for (size_t i = 0; i < pointcloud->points.size(); ++i){
@@ -83,6 +83,8 @@ void GeometryEngine::setPointCloudTo(pcl::PointCloud<pcl::PointXYZRGB>::Ptr poin
     // Transfer index data to VBO 1
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointcloud->points.size() * sizeof(GLuint), indices, GL_STATIC_DRAW);
+
+    delete[] vertices;
 }
 
 void GeometryEngine::drawPointCloud(QGLShaderProgram *program)
@@ -194,8 +196,8 @@ void GeometryEngine::setSurfaceMeshTo(pcl::PolygonMesh &surfacemesh, pcl::PointC
 
     //cout << "GeometryEngine:" << cloud.points.size() << endl;
 
-    VertexData vertices[cloud.points.size()];
-    //VertexData vertices[999999]; //TODO: solve this in a nicer way
+    VertexData* vertices= new VertexData[cloud.points.size()]; // Clang does not like this
+ ///   VertexData vertices[999999]; //TODO: solve this in a nicer way
     GLuint indices[surfacemesh.polygons.size()*3];
 
 
@@ -232,6 +234,8 @@ void GeometryEngine::setSurfaceMeshTo(pcl::PolygonMesh &surfacemesh, pcl::PointC
     // Transfer index data to VBO 3
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[3]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numberOfIndices * sizeof(GLuint), indices, GL_STATIC_DRAW);
+
+    delete[] vertices;
 }
 
 void GeometryEngine::drawSurfaceMesh(QGLShaderProgram *program)
