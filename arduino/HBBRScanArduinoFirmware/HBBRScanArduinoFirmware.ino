@@ -1,12 +1,13 @@
 // HBBRScan - http://combinatorialdesign/designs/HBBR_Scanner
-// Created by Pawel Wodnicki on 7/1/11.
-// compatible wih 
-// FabScan - http://hci.rwth-aachen.de/fabscan
 //
+// compatible wih
+//
+// FabScan - http://hci.rwth-aachen.de/fabscan
 // 
-//  Created by Francis Engelmann on 7/1/11.
+//  by Francis Engelmann
 //  Copyright 2011 Media Computing Group, RWTH Aachen University. All rights reserved.
-//  Last Modifcation: R. Bohne 29.01.2013: changed pin mapping to Watterott FabScan Arduino Shield
+//  Copyright 2013 Pawel Wodnicki. All rights reserved.
+
 
 // 4 Phase Stepper PINS
 #define  STEPPER_PIN1 2
