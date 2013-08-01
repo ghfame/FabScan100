@@ -56,18 +56,55 @@ int currStepper;
 
 int step_sequence[][4] =   {
                           {1,0,0,0},
+                          {1,1,0,0},
+                          {0,1,0,0},
+                          {0,1,1,0},
+                          {0,0,1,0},
+                          {0,0,1,1},
+                          {0,0,0,1},
+                          {1,0,0,1}
+                          };
+
+
+int step_sequence_4_phase[][4] =   {
+                          {1,0,0,0},
                           {0,1,0,0},
                           {0,0,1,0},
                           {0,0,0,1}
                           };
-
-
-
 int step_position  = 0;
 int step_direction = 0;
 
-
+// 8 phase
 void rotate_platform(){
+  if ( step_direction == 0 ) { //CCW
+     if (step_position >= 8)
+       step_position = 0;
+     digitalWrite(STEPPER_PIN1, step_sequence[step_position][0]);
+     digitalWrite(STEPPER_PIN2, step_sequence[step_position][1]);
+     digitalWrite(STEPPER_PIN3, step_sequence[step_position][2]);
+     digitalWrite(STEPPER_PIN4, step_sequence[step_position][3]);
+     step_position++;
+     if (step_position == 8){
+       step_position = 0;
+     }
+  } else {
+     if (step_position < 0)
+       step_position = 7;
+     digitalWrite(STEPPER_PIN4, step_sequence[step_position][3]);
+     digitalWrite(STEPPER_PIN3, step_sequence[step_position][2]);
+     digitalWrite(STEPPER_PIN2, step_sequence[step_position][1]);
+     digitalWrite(STEPPER_PIN1, step_sequence[step_position][0]);
+     step_position--;
+     if (step_position < 0){
+       step_position = 7;
+     }
+  }
+   
+}
+
+// 4 phase
+void rotate_platform_4_phase(){
   if ( step_direction == 0 ) { //CCW
      if (step_position >= 4)
        step_position = 0;
@@ -93,7 +130,6 @@ void rotate_platform(){
   }
    
 }
-
 void step()
 {
  if(currStepper == TURNTABLE_STEPPER){
@@ -109,6 +145,7 @@ void step()
 
 void step(int count)
 {
+  count *= 2; // 8 phase
   for(int i=0; i<count; i++){
     step();
   }
