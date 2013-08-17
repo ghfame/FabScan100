@@ -3,6 +3,7 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QFuture>
+#include <QtTest/QTest>
 #include <QtConcurrent/QtConcurrentRun>
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
@@ -86,7 +87,7 @@ void FSController::scanThread()
         return;
     }
     //detect laser line
-    this->detectLaserLine();
+////    this->detectLaserLine();
     //turn off stepper (if available)
     this->laser->disable();
 
@@ -101,13 +102,15 @@ void FSController::scanThread()
     for(FSFloat i=0; i<360 && scanning==true; i+=stepDegrees){
         //take picture without laser
         laser->turnOff();
-        QThread::msleep(200);
+///        QThread::msleep(200);
+		QTest::qWait(200);
         cv::Mat laserOff = webcam->getFrame();
         cv::resize( laserOff,laserOff,cv::Size(1280,960) );
 
         //take picture with laser
         laser->turnOn();
-        QThread::msleep(200);
+///        QThread::msleep(200);
+        QTest::qWait(200);
         cv::Mat laserOn = webcam->getFrame();
         cv::resize( laserOn,laserOn,cv::Size(1280,960) );
 
@@ -118,7 +121,8 @@ void FSController::scanThread()
         mainwindow->redraw();
         //turn turntable a step
         turntable->turnNumberOfDegrees(stepDegrees);
-        QThread::msleep(  300+stepDegrees*100);
+///        QThread::msleep(  300+stepDegrees*100);
+		QTest::qWait(300+stepDegrees*100);
     }
     if(scanning) mainwindow->doneScanning();
     scanning = false; //stop scanning
@@ -131,7 +135,6 @@ void FSController::scanThread2()
         return;
     }
     scanning = true; //start scanning
-
     qDebug() << "done with turn to angle";
     //laser->turnNumberOfDegrees( laser->getRotation().y - LASER_SWIPE_MIN );
     turntable->setDirection(FS_DIRECTION_CW);
@@ -140,17 +143,20 @@ void FSController::scanThread2()
         laser->turnOn();
         laser->enable();
         laser->turnToAngle(laserSwipeMin);
-        QThread::msleep(2500);
+///        QThread::msleep(2500);
+		QTest::qWait(2500);
         laser->setDirection(FS_DIRECTION_CCW);
         for(FSFloat i=laserSwipeMin; i<laserSwipeMax && scanning==true; i+=laserStepSize){
             qDebug() << i;
             laser->turnOff();
-            QThread::msleep(200);
+///            QThread::msleep(200);
+            QTest::qWait(200);
             cv::Mat laserOff = webcam->getFrame();
             cv::resize( laserOff,laserOff,cv::Size(1280,960) );
 
             laser->turnOn();
-            QThread::msleep(200);
+///            QThread::msleep(200);
+            QTest::qWait(200);
             cv::Mat laserOn = webcam->getFrame();
             cv::resize( laserOn,laserOn,cv::Size(1280,960) );
 
@@ -158,7 +164,8 @@ void FSController::scanThread2()
             geometries->setPointCloudTo(model->pointCloud);
             mainwindow->redraw();
             laser->turnNumberOfDegrees(laserStepSize);
-            QThread::msleep(laserStepSize*100);
+///            QThread::msleep(laserStepSize*100);
+			QTest::qWait(laserStepSize*100);
         }
         laser->disable();
         turntable->enable();
@@ -168,7 +175,8 @@ void FSController::scanThread2()
         name.append(".ply");
         //model->savePointCloudAsPLY(name);
         //model->pointCloud->clear();
-        QThread::msleep(turntableStepSize*100);
+///        QThread::msleep(turntableStepSize*100);
+		QTest::qWait(turntableStepSize*100);
     }
     if(scanning) mainwindow->doneScanning();
     scanning = false; //stop scanning
@@ -177,27 +185,37 @@ void FSController::scanThread2()
 cv::Mat FSController::diffImage()
 {
     laser->turnOff();
-    QThread::msleep(200);
+///    QThread::msleep(200);
+    QTest::qWait(200);
+
     cv::Mat laserOff = webcam->getFrame();
     cv::resize( laserOff,laserOff,cv::Size(1280,960) );
 
     laser->turnOn();
-    QThread::msleep(200);
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::Mat laserOn = webcam->getFrame();
     cv::resize( laserOn,laserOn,cv::Size(1280,960) );
 
     return vision->diffImage(laserOff,laserOn);
 }
 
+
 bool FSController::detectLaserLine()
 {
     unsigned int threshold = 40;
     laser->turnOff();
-    QThread::msleep(200);
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::Mat laserOffFrame = webcam->getFrame();
+///    QThread::msleep(200);
+    QTest::qWait(200);
     laser->turnOn();
-    QThread::msleep(200);
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::Mat laserOnFrame = webcam->getFrame();
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::resize( laserOnFrame,laserOnFrame,cv::Size(1280,960) );
     cv::resize( laserOffFrame,laserOffFrame,cv::Size(1280,960) );
 

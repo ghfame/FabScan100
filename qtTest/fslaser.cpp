@@ -36,7 +36,8 @@ void FSLaser::turnNumberOfSteps(unsigned int steps)
     this->selectStepper();
     qDebug()<<"Steps: " << steps;
     unsigned char size = steps/256*2;
-    char c[size];
+///    char c[size];
+    char c[1024];
     unsigned int s = steps;
     for(unsigned int i=0; i<=(steps/256); i++){
         c[2*i]=MC_PERFORM_STEP;

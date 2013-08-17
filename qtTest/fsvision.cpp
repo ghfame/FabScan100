@@ -155,9 +155,17 @@ cv::Mat FSVision::subLaser2(cv::Mat &laserOff, cv::Mat &laserOn)
     cv::subtract(bwLaserOn,bwLaserOff,diffImage); //subtract both grayscales
     tresh2Image = diffImage.clone();
 
-    /*cv::namedWindow("laserLine");
-    cv::imshow("laserLine", diffImage);
-    cv::waitKey(0);*/
+#ifdef FB_DEBUG
+    cv::namedWindow("bwLaserOff");
+    cv::imshow("bwLaserOff", bwLaserOff);
+    cv::waitKey(0);
+    cv::namedWindow("bwLaserOn");
+    cv::imshow("bwLaserOn", bwLaserOn);
+    cv::waitKey(0);
+    cv::namedWindow("tresh2Image");
+    cv::imshow("tresh2Image", tresh2Image);
+    cv::waitKey(0);
+#endif
 
     // Apply the specified morphology operation
     //cv::imshow("laserLine", FSVision::histogram(diffImage));
@@ -197,7 +205,14 @@ cv::Mat FSVision::subLaser2(cv::Mat &laserOff, cv::Mat &laserOn)
     //cv::waitKey(0);
     //cv::destroyWindow("laserLine");
 
-    int edges[cols]; //contains the cols index of the detected edges per row
+#ifdef FB_DEBUG
+    cv::namedWindow("diffImage");
+    cv::imshow("diffImage", diffImage);
+    cv::waitKey(0);
+#endif
+
+///    int edges[cols]; //contains the cols index of the detected edges per row
+    int edges[4096]; //contains the cols index of the detected edges per row
     for(unsigned int y = 0; y <rows; y++){
         //reset the detected edges
         for(unsigned int j=0; j<cols; j++){ edges[j]=-1; }
@@ -226,6 +241,14 @@ cv::Mat FSVision::subLaser2(cv::Mat &laserOff, cv::Mat &laserOn)
     cv::waitKey(0);
     cv::destroyAllWindows();*/
     cv::cvtColor(laserImage, result, CV_GRAY2RGB); //convert back ro rgb
+#ifdef FB_DEBUG
+    cv::namedWindow("laserImage");
+    cv::imshow("laserImage", laserImage);
+    cv::waitKey(0);
+    cv::namedWindow("laserImage+tresh2Image");
+    cv::imshow("laserImage+tresh2Image", laserImage+tresh2Image);
+    cv::waitKey(0);
+#endif
     return result;
 }
 

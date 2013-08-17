@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui opengl multimedia multimediawidgets
+QT += core gui opengl multimedia multimediawidgets testlib
 
 CONFIG += static noframework
 
@@ -14,7 +14,8 @@ TEMPLATE = app
 CONFIG += precompile_header
 PRECOMPILED_HEADER = staticHeaders.h
 
-include(qextserialport-1.2beta2/src/qextserialport.pri)
+include(qextserialport/src/qextserialport.pri)
+#include(qextserialport-1.2beta2/src/qextserialport.pri)
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -169,5 +170,63 @@ linux-g++ {
 }
 
 win32 {
-    message("Buildng for Win. not working yet...")
+    message("Buildng for Win.")
+
+    INCLUDEPATH += /32bitmicro/hbbr/src/Modules/Vision/install/include
+
+    LIBS += -L/32bitmicro/hbbr/src/Modules/Vision/install/lib/ \
+    opencv_core290.lib \
+    opencv_highgui290.lib \
+    opencv_imgproc290.lib \
+    opencv_features2d290.lib \
+    opencv_calib3d290.lib
+
+    INCLUDEPATH += /usr/include/
+
+    INCLUDEPATH += /32bitmicro/hbbr/src/Modules/Vision/install/include/pcl-1.6
+    LIBS += -L/usr/lib \
+    pcl_common_release.lib \
+    pcl_io_release.lib \
+    pcl_filters_release.lib \
+    pcl_kdtree_release.lib \
+    pcl_registration_release.lib \
+    pcl_features_release.lib \
+    pcl_segmentation_release.lib \
+    pcl_surface_release.lib \
+    pcl_search_release.lib
+
+    INCLUDEPATH += /32bitmicro/hbbr/src/Modules/Math/install/include/eigen3
+    INCLUDEPATH += /32bitmicro/hbbr/src/Modules/Vision/install/include/flann
+    INCLUDEPATH += /32bitmicro/hbbr/src/Modules/C++/install/include/boost-1_50
+
+#        -lboost_exception-vc90-mt-1_50.lib \
+#        -lboost_context-vc90-mt-1_50.lib \
+
+    LIBS += /LIBPATH:/32bitmicro/hbbr/src/Modules/C++/install/lib \
+        boost_chrono-vc90-mt-1_50.lib \
+        boost_date_time-vc90-mt-1_50.lib \
+        boost_filesystem-vc90-mt-1_50.lib \
+        boost_graph-vc90-mt-1_50.lib \
+        boost_iostreams-vc90-mt-1_50.lib \
+        boost_locale-vc90-mt-1_50.lib \
+        boost_math_c99-vc90-mt-1_50.lib \
+        boost_math_c99f-vc90-mt-1_50.lib \
+        boost_math_c99l-vc90-mt-1_50.lib \
+        boost_math_tr1-vc90-mt-1_50.lib \
+        boost_math_tr1f-vc90-mt-1_50.lib \
+        boost_math_tr1l-vc90-mt-1_50.lib \
+        boost_prg_exec_monitor-vc90-mt-1_50.lib \
+        boost_program_options-vc90-mt-1_50.lib \
+        boost_python-vc90-mt-1_50.lib \
+        boost_random-vc90-mt-1_50.lib \
+        boost_regex-vc90-mt-1_50.lib \
+        boost_serialization-vc90-mt-1_50.lib \
+        boost_signals-vc90-mt-1_50.lib \
+        boost_system-vc90-mt-1_50.lib \
+        #boost_test_exec_monitor-vc90-mt-1_50.lib \
+        boost_thread-vc90-mt-1_50.lib \
+        boost_timer-vc90-mt-1_50.lib \
+        boost_unit_test_framework-vc90-mt-1_50.lib \
+        boost_wave-vc90-mt-1_50.lib \
+        boost_wserialization-vc90-mt-1_50.lib \
 }

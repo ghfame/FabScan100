@@ -6,6 +6,7 @@
 #include "fsserial.h"
 
 #include <QDebug>
+#include <QtTest/QTest>
 #include <QFuture>
 #include <QtConcurrent/QtConcurrentRun>
 
@@ -141,11 +142,17 @@ void FSControlPanel::on_pushButton_2_clicked()
 
     FSController::getInstance()->laser->enable();
     FSController::getInstance()->laser->turnOff();
-    QThread::msleep(200);
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::Mat laserOffFrame = FSController::getInstance()->webcam->getFrame();
+///    QThread::msleep(200);
+    QTest::qWait(200);
     FSController::getInstance()->laser->turnOn();
-    QThread::msleep(200);
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::Mat laserOnFrame = FSController::getInstance()->webcam->getFrame();
+///    QThread::msleep(200);
+    QTest::qWait(200);
     cv::resize( laserOnFrame,laserOnFrame,cv::Size(1280,960) );
     cv::resize( laserOffFrame,laserOffFrame,cv::Size(1280,960) );
 

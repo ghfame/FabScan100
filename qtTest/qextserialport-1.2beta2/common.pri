@@ -1,4 +1,4 @@
-infile(config.pri, QEXTSERIALPORT_LIBRARY, yes): CONFIG += qextserialport-library
+qinfile(config.pri, QEXTSERIALPORT_LIBRARY, yes): CONFIG += qextserialport-library
 qextserialport-library{
     infile(config.pri, QEXTSERIALPORT_STATIC, yes): CONFIG += qextserialport-static
 }

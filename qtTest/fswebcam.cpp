@@ -26,7 +26,10 @@ cv::Mat FSWebCam::getFrame()
 {
     frameTaken = false;
     isCapturingImage = true;
-    imageCapture->capture("./");
+    imageCapture->cancelCapture();
+	camera->stop();
+	camera->start();
+    imageCapture->capture("./fabscan100.jpg");
     //qDebug() << "preparing to take frame";
     //wait until camera has taken picture, then return
     while(!frameTaken){
@@ -108,7 +111,7 @@ void FSWebCam::imageSaved(int id, const QString &fileName)
                 img2.width(),
                 CV_8UC3,
                 (uchar*)img2.bits(), img2.bytesPerLine());
-    frame = mat;
+	frame = mat.clone();
     cv::cvtColor(mat,frame, CV_RGB2BGR);
     frameTaken = true;
     isCapturingImage = false;

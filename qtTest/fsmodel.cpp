@@ -190,19 +190,26 @@ void FSModel::convertPointCloudToSurfaceMesh2()
     this->savePointCloudAsPTS(ptsFilePath);
     char* command;
 
+#ifndef _MSC_VER
     asprintf(&command,"cd %s; ./powercrust -i %s -R 1.5 -B -m 10000", resPath, "pc.pts");
+#endif
     sysRet = system(command);
     cerr << command << " system: " << sysRet << endl;
 
     if(sysRet==0){
         FSController::getInstance()->meshComputed=true;
     }
-    asprintf(&command,"cd %s; ./orient -i pc.off -o final.off",resPath);
+#ifndef _MSC_VER
+    asprintf(&command,"cd %s; ./orient -i pc.off -o final.off",resPath);  
+#endif
+
     sysRet = system(command);
     cerr << command << " system: " << sysRet << endl;
 
     char* offFilePath;
+#ifndef _MSC_VER
     asprintf(&offFilePath,"%sfinal.off",resPath);
+#endif
     cerr << "loading surface from off..." << endl;
     this->openFromOFFFile(offFilePath);
 

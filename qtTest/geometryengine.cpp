@@ -59,7 +59,8 @@ void GeometryEngine::setPointCloudTo(pcl::PointCloud<pcl::PointXYZRGB>::Ptr poin
 {
    VertexData* vertices= new VertexData[pointcloud->points.size()]; // Clang does not like this
 ///    VertexData vertices[99999];
-    GLuint indices[pointcloud->points.size()];
+///    GLuint indices[pointcloud->points.size()];
+    GLuint* indices = new GLuint[pointcloud->points.size()];
 
     for (size_t i = 0; i < pointcloud->points.size(); ++i){
         VertexData vd;
@@ -67,7 +68,11 @@ void GeometryEngine::setPointCloudTo(pcl::PointCloud<pcl::PointXYZRGB>::Ptr poin
                     pointcloud->points[i].x,
                     pointcloud->points[i].y,
                     pointcloud->points[i].z);
+#ifndef _MSC_VER
         uint32_t rgb = pointcloud->points[i].rgb;
+#else
+        unsigned int rgb = pointcloud->points[i].rgb;
+#endif
         vd.color = QVector3D(
                     (rgb>>16)&0x0000ff,
                     (rgb>>8)&0x0000ff,
@@ -197,8 +202,9 @@ void GeometryEngine::setSurfaceMeshTo(pcl::PolygonMesh &surfacemesh, pcl::PointC
     //cout << "GeometryEngine:" << cloud.points.size() << endl;
 
     VertexData* vertices= new VertexData[cloud.points.size()]; // Clang does not like this
- ///   VertexData vertices[999999]; //TODO: solve this in a nicer way
-    GLuint indices[surfacemesh.polygons.size()*3];
+///    VertexData vertices[999999]; //TODO: solve this in a nicer way
+///    GLuint indices[surfacemesh.polygons.size()*3];
+    GLuint* indices = new GLuint[surfacemesh.polygons.size()*3];
 
 
     for (unsigned int i = 0; i < cloud.points.size(); ++i){

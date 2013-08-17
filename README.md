@@ -1,22 +1,23 @@
 FabScan100
 ==========
-The FabScan100 software is planned to run on Mac and Linux (and maybe also Windows).
+The FabScan100 software is planned to run on Mac, Linux and Windows.
 This git repository stores all the files for the project, software as well as the hardware.
 
 Also check these links for more information:
 * http://hci.rwth-aachen.de/fabscan100
 * http://groups.google.com/group/fabscan
+* http://www.combinatorialdesign.com/designs/HBBR_Scanner/tools/FabScan100
 
 Progress
 ========
 
-FabScan100 is now functional! Runs on Mac and Ubuntu, still needs to be ported to Windows.
+FabScan100 is now functional! Runs on Mac, Ubuntu and Windows.
 
 Current Setup on Mac: Qt 5.0.1 with Qt-Creator 2.6.2
 
 Current Setup on Ubuntu: Qt 5.0.1 with Qt-Creator 2.6.2 
 
-Current Setup on Windows: not tested, who wants to do this ?
+Current Setup on Windows: Qt 5.0.2 with Qt-Creator 2.8.0 
 
 Qt 4.8 is needed for QGLFunctions.
 
@@ -24,7 +25,7 @@ Installation
 ===========
 
 Install "Qt Creator" and "Qt Libraries Qt 5.0" from http://qt-project.org/downloads.
-Make sure you have OpenGL installed. Preinstalled on Ubuntu, Mac. What about Windows?
+Make sure you have OpenGL installed. Preinstalled on Ubuntu, Mac, must be installed on Windows.
 
 Mac OS X 10.8.2 with XCode 4.6 installed
 ========================================
@@ -89,7 +90,11 @@ Ubuntu 12.10:
 
 Windows:
 ========
-People are working on this :)
+1. Install Qt
+  * Install Qt-5.0.2 libraries http://qt-project.org/downloads
+  
+2. Download  FabScan100 http://www.combinatorialdesign.com/static/designs/HBBR_Scanner/tools/windows/FabScan100.zip
+   * Contains precompiled: Qt shared libraries (DLLs), OpenCV, Boost, flann, eigen and PCL.
  
 Other platforms
 ===============

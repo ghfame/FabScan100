@@ -1,6 +1,6 @@
 #ifndef STATICHEADERS_H
 #define STATICHEADERS_H
-
+#define BOOST_ALL_NO_LIB 1
 #include <Eigen/Core>
 #include <opencv2/core/types_c.h>
 #include <opencv2/core/core.hpp>
@@ -25,10 +25,11 @@
 #include <QMatrix4x4>
 #include <QQuaternion>
 
+#ifndef Q_MOC_RUN
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/vtk_io.h>
-
+#endif
 #include "fsdefines.h"
 #include "fsgeometries.h"
 
