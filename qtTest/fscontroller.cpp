@@ -87,7 +87,12 @@ void FSController::scanThread()
         return;
     }
     //detect laser line
-////    this->detectLaserLine();
+
+    // PW why are we detecting it here during scanning?
+    // we should only do this if laser position has not been established yet
+    // otherwise this leads to problems when line is either obscured or we get wrong angle
+    // this is not reliable and laser line should be detected only during calibration
+///    this->detectLaserLine();
     //turn off stepper (if available)
     this->laser->disable();
 

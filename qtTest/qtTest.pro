@@ -61,8 +61,8 @@ RESOURCES += \
 
 macx {
     message("Buildng for Mac.")
-#    INCLUDEPATH += /usr/local/Cellar/opencv/2.4.2/include
-#    LIBS += -L/usr/local/Cellar/opencv/2.4.2
+    INCLUDEPATH += /usr/local/Cellar/opencv/2.4.5/include
+    LIBS += -L/usr/local/Cellar/opencv/2.4.5
     INCLUDEPATH += /usr/local/include
     LIBS += -L/usr/local/lib \
     -lopencv_core \
@@ -136,6 +136,7 @@ macx {
         -lboost_unit_test_framework-mt \
         -lboost_wave-mt \
         -lboost_wserialization-mt \
+
 }
 
 linux-g++ {
