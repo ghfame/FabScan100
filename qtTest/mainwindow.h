@@ -32,6 +32,7 @@ public:
     void redraw();
     FSControlPanel* controlPanel;
     void doneScanning();
+    void closeEvent(QCloseEvent *event);
 
 
 private slots:
@@ -49,6 +50,7 @@ private slots:
 
     void on_resolutionComboBox_currentIndexChanged(const QString &arg1);
 
+    void on_quit();
 private:
     QBasicTimer *hwTimer; //updates connected hw:arduino,webcam,...
     Ui::MainWindow *ui;

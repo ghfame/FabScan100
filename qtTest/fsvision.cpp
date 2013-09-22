@@ -512,7 +512,7 @@ FSPoint FSVision::detectLaserLine( cv::Mat &laserOff, cv::Mat &laserOn, unsigned
                      minVote,
                      minLength,
                      maxGap );
-
+#ifdef FB_DEBUG
     cv::Mat laserHoughLines( rows,cols,CV_8UC3,cv::Scalar(0) );
     cv::cvtColor(laserLineBW, laserHoughLines, CV_GRAY2RGB); //convert to color
     for(int i=0;i<lines.size();i++){
@@ -528,6 +528,7 @@ FSPoint FSVision::detectLaserLine( cv::Mat &laserOff, cv::Mat &laserOn, unsigned
     cv::imshow("Detected Lines with HoughP",laserHoughLines);
     cv::waitKey(0);
     cvDestroyWindow("Detected Lines with HoughP");
+#endif
 
     //should at least detect the laser line
     qDebug() << "detected"<<lines.size()<<"lines";

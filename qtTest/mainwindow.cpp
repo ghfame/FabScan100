@@ -7,6 +7,8 @@
 #include <QDialogButtonBox>
 #include <QFuture>
 #include <QtCore>
+#include <QEvent>
+#include <QCloseEvent>
 //#include <QtConcurrentRun>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QCamera>
@@ -347,4 +349,20 @@ void MainWindow::on_resolutionComboBox_currentIndexChanged(const QString &arg1)
         FSController::getInstance()->turntableStepSize = 10*16*FSController::getInstance()->turntable->degreesPerStep;
         FSController::getInstance()->yDpi = 10;
     }
+}
+
+void MainWindow::on_quit()
+{
+    // jsut quit - OSX problem
+    QTimer::singleShot(10000, qApp, SLOT(quit()));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    FSController::getInstance()->scanning = false; /// force it to stop
+    // workaroud OSX problem with CV windows hanging around
+    cv::destroyAllWindows();
+    on_quit();
+    event->accept();
+    ///event->ignore();
 }

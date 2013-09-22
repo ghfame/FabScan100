@@ -6,7 +6,7 @@
 FSLaser::FSLaser()
 {
     laserPointPosition = FSMakePoint(14.0f, 0.0f, 0.0f);
-    degreesPerStep = 360.0f/200.0f/16.0f; //the size of a microstep
+    degreesPerStep = 0.1f; ///360.0f/200.0f/16.0f; //the size of a microstep
     direction = FS_DIRECTION_CW;
     rotation = FSMakePoint(0.0f, 0.0f, 0.0f);
     position = FSMakePoint(LASER_POS_X, LASER_POS_Y, LASER_POS_Z);
@@ -17,12 +17,20 @@ FSLaser::FSLaser()
 
 FSLaser::FSLaser(bool r)
 {
-    if ( r ) {
+    laserPointPosition = FSMakePoint(14.0f, 0.0f, 0.0f);
+    degreesPerStep = 0.1f; ///360.0f/200.0f/16.0f; //the size of a microstep
+    direction = FS_DIRECTION_CW;
+    rotation = FSMakePoint(0.0f, 0.0f, 0.0f);
 
+    if ( r ) {
+        position = FSMakePoint(LASER_POS_X, LASER_POS_Y, LASER_POS_Z);
+        right = true;
     } else {
         position = FSMakePoint(LASER2_POS_X, LASER2_POS_Y, LASER2_POS_Z);
         right = false;
     }
+
+    enabled = false;
 }
 
 void FSLaser::selectStepper()
@@ -67,7 +75,7 @@ void FSLaser::turnNumberOfSteps(unsigned int steps)
 
 void FSLaser::turnNumberOfDegrees(double degrees)
 {
-    int steps = (int)(degrees/degreesPerStep);
+    int steps = (int) ceil(degrees/degreesPerStep);
     //make sure to correctly update rotation in degrees, not steps
     degrees = (double)steps*(double)degreesPerStep;
     qDebug()<<"Steps"<<steps<<"Degrees"<<degrees;
@@ -78,7 +86,11 @@ void FSLaser::turnNumberOfDegrees(double degrees)
     }
     qDebug()<<"computed number of steps";
     turnNumberOfSteps(steps);
-    FSController::getInstance()->controlPanel->setLaserAngleText(rotation.y);
+    if(right) {
+        FSController::getInstance()->controlPanel->setLaserAngleText(rotation.y);
+    } else {
+        FSController::getInstance()->controlPanel->setLaser2AngleText(rotation.y);
+    }
 }
 
 void FSLaser::turnToAngle(float degrees)

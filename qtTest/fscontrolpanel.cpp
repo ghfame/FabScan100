@@ -78,8 +78,8 @@ void FSControlPanel::on_autoResetButton_clicked()
     shot = FSController::getInstance()->vision->drawLaserLineToFrame(shot);
     cv::resize(shot,shot,cv::Size(800,600));
     cv::imshow("Laser Frame",shot);
-    cv::waitKey(0);
-    cvDestroyWindow("Laser Frame");
+///    cv::waitKey(0);
+///    cvDestroyWindow("Laser Frame");
     this->raise();
     this->focusWidget();
     this->setVisible(true);
@@ -136,8 +136,8 @@ void FSControlPanel::on_diffImage_clicked()
     cv::Mat shot = FSController::getInstance()->diffImage();
     cv::resize(shot,shot,cv::Size(800,600));
     cv::imshow("Laser Frame",shot);
-    cv::waitKey(0);
-    cvDestroyWindow("Laser Frame");
+///    cv::waitKey(0);
+///    cvDestroyWindow("Laser Frame");
     this->raise();
     this->focusWidget();
     this->setVisible(true);
@@ -200,8 +200,8 @@ void FSControlPanel::on_pushButton_2_clicked()
     cv::Mat shot = FSVision::subLaser2(laserOffFrame, laserOnFrame);
     cv::resize(shot,shot,cv::Size(800,600));
     cv::imshow("Laser Frame",shot);
-    cv::waitKey(0);
-    cvDestroyWindow("Laser Frame");
+///    cv::waitKey(0);
+///    cvDestroyWindow("Laser Frame");
     this->raise();
     this->focusWidget();
     this->setVisible(true);

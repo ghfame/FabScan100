@@ -21,9 +21,8 @@ FSController::FSController()
     serial = new FSSerial();
     webcam = new FSWebCam();
     turntable = new FSTurntable();
-    laser = new FSLaser();
-    laser2 = new FSLaser(false);
-///    laser2->setRight(false);
+    laser = new FSLaser(true);      // right laser
+    laser2 = new FSLaser(false);    // left  laser
     vision = new FSVision();
     scanning = false;
     //all in degrees; (only when stepper is attached to laser)
@@ -67,8 +66,8 @@ void FSController::fetchFrame()
     cv::Mat result = vision->drawHelperLinesToFrame(frame);
     cv::resize(result,result,cv::Size(800,600)); //this is the resolution of the preview
     cv::imshow("Extracted Frame",result);
-    cv::waitKey(0);
-    cvDestroyWindow("Extracted Frame");
+///    cv::waitKey(0);
+///    cvDestroyWindow("Extracted Frame");
 }
 
 void FSController::hideFrame()
@@ -112,6 +111,10 @@ void FSController::scanThread()
 
     //iterate over a complete turn of the turntable
     for(FSFloat i=0; i<360 && scanning==true; i+=stepDegrees){
+        if(!scanning) {
+            mainwindow->doneScanning();
+            break;
+        }
         //take picture without laser
         laser->turnOff();
 ///        QThread::msleep(200);
