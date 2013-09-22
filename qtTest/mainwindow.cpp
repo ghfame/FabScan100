@@ -12,6 +12,8 @@
 #include <QCamera>
 #include <QSound>
 
+#include <QHash>
+
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 
@@ -234,6 +236,8 @@ void MainWindow::enumerateSerialPorts()
 
 void MainWindow::enumerateWebCams()
 {
+	QHash<QString,QByteArray> processed_cameras;
+
     if(QCamera::availableDevices().size()==0){
        QAction* a = new QAction("No camera found.", this);
        a->setEnabled(false);
@@ -247,6 +251,10 @@ void MainWindow::enumerateWebCams()
     ui->menuCamera->clear();
     foreach(const QByteArray &deviceName, QCamera::availableDevices()) {
         QString description = camera->deviceDescription(deviceName);
+		if ( processed_cameras.contains(description) ) {
+			continue;
+		}
+		processed_cameras.insert(description,deviceName);
         QAction *videoDeviceAction = new QAction(description, this);
         videoDeviceAction->setCheckable(true);
         videoDeviceAction->setData(QVariant(deviceName));
@@ -258,10 +266,11 @@ void MainWindow::enumerateWebCams()
         }*/
 
         if (FSController::getInstance()->webcam->info.portName.compare(description)==0) {
-            //cameraDevice = deviceName;
+///            cameraDevice = deviceName;
             videoDeviceAction->setChecked(true);
-        }
-        ui->menuCamera->addAction(videoDeviceAction);
+		} 
+		
+		ui->menuCamera->addAction(videoDeviceAction);
     }
 }
 

@@ -176,11 +176,11 @@ win32 {
     INCLUDEPATH += /32bitmicro/hbbr/src/Modules/Vision/install/include
 
     LIBS += -L/32bitmicro/hbbr/src/Modules/Vision/install/lib/ \
-    opencv_core290.lib \
-    opencv_highgui290.lib \
-    opencv_imgproc290.lib \
-    opencv_features2d290.lib \
-    opencv_calib3d290.lib
+    opencv_core245.lib \
+    opencv_highgui245.lib \
+    opencv_imgproc245.lib \
+    opencv_features2d245.lib \
+    opencv_calib3d245.lib
 
     INCLUDEPATH += /usr/include/
 
