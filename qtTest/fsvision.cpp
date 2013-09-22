@@ -339,10 +339,14 @@ void FSVision::putPointsFromFrameToCloud(
     //calculate position of laser in cv frame
     //position of the laser line on the back plane in frame/image coordinates
     FSPoint fsLaserLinePosition = laser->getLaserPointPosition();
+    FSPoint fsLaserLinePosition2 = laser2->getLaserPointPosition();
     //position of the laser line on the back plane in world coordinates
     CvPoint cvLaserLinePosition = convertFSPointToCvPoint(fsLaserLinePosition);
+    CvPoint cvLaserLinePosition2 = convertFSPointToCvPoint(fsLaserLinePosition2);
 
     FSFloat laserPos = cvLaserLinePosition.x; //const over all y
+    FSFloat laserPos2 = cvLaserLinePosition2.x; //const over all y
+
 
     //laserLine is result of subLaser2, is in RGB
     unsigned int cols = laserLine.cols;
@@ -354,6 +358,23 @@ void FSVision::putPointsFromFrameToCloud(
     cv::cvtColor(laserLine, bwImage, CV_RGB2GRAY); //convert to grayscale
     //now iterating from top to bottom over bwLaserLine frame
     //no bear outside of these limits :) cutting of top and bottom of frame
+    unsigned int startx;
+    unsigned int endx;
+
+    // laser 1 - right side - left line
+    if ( laser->getEnabled() ) {
+        endx = laserPos+ANALYZING_LASER_OFFSET;
+    } else {
+        endx = 0;
+    }
+
+    // laser 2 - left side - right line
+    if ( laser2->getEnabled() ) {
+        startx = laserPos2-ANALYZING_LASER_OFFSET;
+    } else {
+        startx = bwImage.cols-1;
+    }
+
     for(int y = UPPER_ANALYZING_FRAME_LIMIT;
         y < bwImage.rows-(LOWER_ANALYZING_FRAME_LIMIT);
         y+=dpiVertical )
@@ -361,8 +382,8 @@ void FSVision::putPointsFromFrameToCloud(
         //qDebug() << "checking point at line " << y << laserPos+ANALYZING_LASER_OFFSET;
         //ANALYZING_LASER_OFFSET is the offset where we stop looking for a reflected laser, cos we might catch the non reflected
         //now iteratinf from right to left over bwLaserLine frame
-        for(int x = bwImage.cols-1;
-            x >= laserPos+ANALYZING_LASER_OFFSET;
+        for(int x = startx;
+            x >= endx;
             x -= 1){
             //qDebug() << "Pixel value: " << bwImage.at<uchar>(y,x);
             if(bwImage.at<uchar>(y,x)==255){ //check if white=laser-reflection

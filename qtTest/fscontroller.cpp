@@ -27,8 +27,12 @@ FSController::FSController()
     vision = new FSVision();
     scanning = false;
     //all in degrees; (only when stepper is attached to laser)
-    laserSwipeMin = 30; //18
-    laserSwipeMax = 45; //50
+    laserSwipeMin = 25; //30; //18
+    laserSwipeMax = 35; //45; //50
+    laserStepSize = 0.1;
+    laserSwipeMin2 = 385;
+    laserSwipeMax2 = 395;
+    laserStepSize2 = 0.1;
     meshComputed = false;
 }
 
@@ -96,7 +100,8 @@ void FSController::scanThread()
     // this is not reliable and laser line should be detected only during calibration
 ///    this->detectLaserLine();
     //turn off stepper (if available)
-    this->laser->disable();
+    // PW do not do that, we use enable/disable to select laser for scanning
+///    this->laser->disable();
 
     scanning = true; //start scanning, if false, scan stops
     FSFloat stepDegrees = turntableStepSize;
@@ -263,4 +268,3 @@ void FSController::computeSurfaceMesh()
 
     //mainwindow->redraw();
 }
-
