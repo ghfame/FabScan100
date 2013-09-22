@@ -22,6 +22,8 @@ FSController::FSController()
     webcam = new FSWebCam();
     turntable = new FSTurntable();
     laser = new FSLaser();
+    laser2 = new FSLaser(false);
+///    laser2->setRight(false);
     vision = new FSVision();
     scanning = false;
     //all in degrees; (only when stepper is attached to laser)
@@ -190,6 +192,7 @@ void FSController::scanThread2()
 cv::Mat FSController::diffImage()
 {
     laser->turnOff();
+///    laser2->turnOff();
 ///    QThread::msleep(200);
     QTest::qWait(200);
 
@@ -197,6 +200,7 @@ cv::Mat FSController::diffImage()
     cv::resize( laserOff,laserOff,cv::Size(1280,960) );
 
     laser->turnOn();
+///    laser2->turnOn();
 ///    QThread::msleep(200);
     QTest::qWait(200);
     cv::Mat laserOn = webcam->getFrame();
@@ -225,9 +229,25 @@ bool FSController::detectLaserLine()
     cv::resize( laserOffFrame,laserOffFrame,cv::Size(1280,960) );
 
     qDebug("images loaded, now detecting...");
-    FSPoint p = vision->detectLaserLine( laserOffFrame, laserOnFrame, threshold );
-    if(p.x == 0.0){return false;}
-    laser->setLaserPointPosition(p);
+    if ( !laser2->getEnabled() ) {
+        FSPoint p = vision->detectLaserLine( laserOffFrame, laserOnFrame, threshold, 0); // 1 laser
+        if(p.x == 0.0){return false;}
+        laser->setLaserPointPosition(p);
+    } else {
+        FSPoint p = vision->detectLaserLine( laserOffFrame, laserOnFrame, threshold, 1); // first laser
+        if(p.x != 0.0){
+            laser->setLaserPointPosition(p);
+        }
+
+        FSPoint p2 = vision->detectLaserLine( laserOffFrame, laserOnFrame, threshold, 2); // second laser
+        if(p2.x != 0.0){
+            laser2->setLaserPointPosition(p2);
+        }
+
+        if(p.x == 0.0 || p2.x == 0.0)
+            return false;
+
+    }
     return true;
 }
 
@@ -243,3 +263,4 @@ void FSController::computeSurfaceMesh()
 
     //mainwindow->redraw();
 }
+

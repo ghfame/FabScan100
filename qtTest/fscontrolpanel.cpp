@@ -31,12 +31,14 @@ void FSControlPanel::on_fetchFrameButton_clicked()
 
 void FSControlPanel::on_laserOnButton_clicked()
 {
-    FSController::getInstance()->laser->turnOn();
+    FSController::getInstance()->laser->turnOn(); //turns on both lasers
+///    FSController::getInstance()->laser2->turnOn();
 }
 
 void FSControlPanel::on_laserOffButton_clicked()
 {
-    FSController::getInstance()->laser->turnOff();
+    FSController::getInstance()->laser->turnOff(); //turns off both lasers
+///    FSController::getInstance()->laser2->turnOff();
 }
 
 void FSControlPanel::on_checkBox_stateChanged(int state)
@@ -92,16 +94,37 @@ void FSControlPanel::on_laserEnable_stateChanged(int state)
     }
 }
 
+void FSControlPanel::on_laserEnable_2_stateChanged(int state)
+{
+    if(state==2){
+        FSController::getInstance()->laser2->enable();
+    }else{
+        FSController::getInstance()->laser2->disable();
+    }
+}
+
 void FSControlPanel::on_laserStepLeftButton_clicked()
 {
     FSController::getInstance()->laser->setDirection(FS_DIRECTION_CCW);
-    FSController::getInstance()->laser->turnNumberOfDegrees(2.0);
+    FSController::getInstance()->laser->turnNumberOfDegrees(0.1);
+}
+
+void FSControlPanel::on_laserStepLeftButton_2_clicked()
+{
+    FSController::getInstance()->laser2->setDirection(FS_DIRECTION_CCW);
+    FSController::getInstance()->laser2->turnNumberOfDegrees(0.1);
 }
 
 void FSControlPanel::on_laserStepRightButton_clicked()
 {
     FSController::getInstance()->laser->setDirection(FS_DIRECTION_CW);
-    FSController::getInstance()->laser->turnNumberOfDegrees(2.0);
+    FSController::getInstance()->laser->turnNumberOfDegrees(0.1);
+}
+
+void FSControlPanel::on_laserStepRightButton_2_clicked()
+{
+    FSController::getInstance()->laser2->setDirection(FS_DIRECTION_CW);
+    FSController::getInstance()->laser2->turnNumberOfDegrees(0.1);
 }
 
 void FSControlPanel::on_diffImage_clicked()
@@ -125,6 +148,11 @@ void FSControlPanel::on_laserSwipeMaxEdit_returnPressed()
     FSController::getInstance()->laserSwipeMax = (ui->laserSwipeMaxEdit->text()).toDouble();
 }
 
+void FSControlPanel::on_laserSwipeMaxEdit_2_returnPressed()
+{
+    FSController::getInstance()->laserSwipeMax = (ui->laserSwipeMaxEdit_2->text()).toDouble();
+}
+
 void FSControlPanel::setLaserAngleText(double angle)
 {
     //QString a = QString::number(angle);
@@ -132,9 +160,21 @@ void FSControlPanel::setLaserAngleText(double angle)
     this->ui->laserAngle->setText(a);
 }
 
+void FSControlPanel::setLaser2AngleText(double angle)
+{
+    //QString a = QString::number(angle);
+    QString a = QString("Angle: %1º").arg(angle);
+    this->ui->laserAngle_2->setText(a);
+}
+
 void FSControlPanel::on_laserSwipeMinEdit_returnPressed()
 {
     FSController::getInstance()->laserSwipeMin = (ui->laserSwipeMinEdit->text()).toDouble();
+}
+
+void FSControlPanel::on_laserSwipeMinEdit_2_returnPressed()
+{
+    FSController::getInstance()->laserSwipeMin = (ui->laserSwipeMinEdit_2->text()).toDouble();
 }
 
 void FSControlPanel::on_pushButton_2_clicked()

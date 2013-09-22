@@ -56,6 +56,11 @@
 #define LASER_POS_Y 10.5f  //not needed/used for calculations
 #define LASER_POS_Z 35.5f //precise by construction
 
+//position of the laser2
+#define LASER2_POS_X -13.5f //precise by construction
+#define LASER2_POS_Y 10.5f  //not needed/used for calculations
+#define LASER2_POS_Z 35.5f //precise by construction
+
 #define LASER_SWIPE_MIN 18.0f
 #define LASER_SWIPE_MAX 52.0f
 

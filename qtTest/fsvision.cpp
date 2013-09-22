@@ -300,7 +300,21 @@ cv::Mat FSVision::drawLaserLineToFrame(cv::Mat &frame)
 
     cv::Point p1 = cv::Point(vertical, 0);          //top of laser line
     cv::Point p2 = cv::Point(vertical, horizontal); //bottom of laser line
+///    if(laser->getEnabled())
     cv::line(frame, p1, p2, CV_RGB( 255,0,0 ),6);   //draw laser line
+
+    // laser 2
+    FSLaser* laser2 = FSController::getInstance()->laser2;
+    CvPoint cvLaserPoint2 = convertFSPointToCvPoint(laser2->getLaserPointPosition());
+
+    FSFloat vertical2    = cvLaserPoint2.x;
+    FSFloat horizontal2  = convertFSPointToCvPoint(FSMakePoint(0,0,0)).y;
+
+    cv::Point p3 = cv::Point(vertical2, 0);           //top of laser line
+    cv::Point p4 = cv::Point(vertical2, horizontal2); //bottom of laser line
+    if(laser2->getEnabled())
+        cv::line(frame, p3, p4, CV_RGB( 255,0,0 ),6);     //draw laser line
+
     return frame;
 }
 
@@ -314,6 +328,7 @@ void FSVision::putPointsFromFrameToCloud(
     //the following lines are just to make to code more readable
     FSModel* model = FSController::getInstance()->model;
     FSLaser* laser = FSController::getInstance()->laser;
+    FSLaser* laser2 = FSController::getInstance()->laser2;
     FSTurntable* turntable = FSController::getInstance()->turntable;
     FSWebCam* webcam = FSController::getInstance()->webcam;
 
@@ -364,12 +379,18 @@ void FSVision::putPointsFromFrameToCloud(
 
                 //convert to world coordinates withouth depth
                 FSPoint fsNewPoint = FSVision::convertCvPointToFSPoint(cvNewPoint);
+                FSPoint fsNewPoint2 = FSVision::convertCvPointToFSPoint(cvNewPoint);
                 FSLine l1 = computeLineFromPoints(webcam->getPosition(), fsNewPoint);
                 FSLine l2 = computeLineFromPoints(laser->getPosition(), laser->getLaserPointPosition());
+                FSLine l3 = computeLineFromPoints(laser2->getPosition(), laser2->getLaserPointPosition());
 
                 FSPoint i = computeIntersectionOfLines(l1, l2);
                 fsNewPoint.x = i.x;
                 fsNewPoint.z = i.z;
+
+                FSPoint i2 = computeIntersectionOfLines(l1, l3);
+                fsNewPoint2.x = i2.x;
+                fsNewPoint2.z = i2.z;
 
                 //At this point we know the depth=z. Now we need to consider the scaling depending on the depth.
                 //First we move our point to a camera centered cartesion system.
@@ -378,11 +399,19 @@ void FSVision::putPointsFromFrameToCloud(
                 //Redo the translation to the box centered cartesion system.
                 fsNewPoint.y += (webcam->getPosition()).y;
 
+                //At this point we know the depth=z. Now we need to consider the scaling depending on the depth.
+                //First we move our point to a camera centered cartesion system.
+                fsNewPoint2.y -= (webcam->getPosition()).y;
+                fsNewPoint2.y *= ((webcam->getPosition()).z - fsNewPoint2.z)/(webcam->getPosition()).z;
+                //Redo the translation to the box centered cartesion system.
+                fsNewPoint2.y += (webcam->getPosition()).y;
+
                 //get color from picture without laser
                 FSUChar r = laserOff.at<cv::Vec3b>(y,x)[2];
                 FSUChar g = laserOff.at<cv::Vec3b>(y,x)[1];
                 FSUChar b = laserOff.at<cv::Vec3b>(y,x)[0];
                 fsNewPoint.color = FSMakeColor(r, g, b);
+                fsNewPoint2.color = FSMakeColor(r, g, b);
 
                 //turning new point according to current angle of turntable
                 //translate coordinate system to the middle of the turntable
@@ -402,7 +431,30 @@ void FSVision::putPointsFromFrameToCloud(
 
                 if(fsNewPoint.y>lowerLimit+0.5 && hypotenuse < 7){ //eliminate points from the grounds, that are not part of the model
                     //qDebug("adding point");
-                    model->addPointToPointCloud(fsNewPoint);
+                    if(x>CAM_IMAGE_WIDTH/2 && laser->getEnabled())
+                        model->addPointToPointCloud(fsNewPoint);
+                }
+
+                //turning new point2 according to current angle of turntable
+                //translate coordinate system to the middle of the turntable
+                fsNewPoint2.z -= TURNTABLE_POS_Z; //7cm radius of turntbale plus 5mm offset from back plane
+                FSPoint alphaDelta2 = turntable->getRotation();
+                FSFloat alphaOld2 = (float)atan(fsNewPoint2.z/fsNewPoint2.x);
+                FSFloat alphaNew2 = alphaOld2+alphaDelta2.y*(M_PI/180.0f);
+                FSFloat hypotenuse2 = (float)sqrt(fsNewPoint2.x*fsNewPoint2.x + fsNewPoint2.z*fsNewPoint2.z);
+
+                if(fsNewPoint2.z < 0 && fsNewPoint2.x < 0){
+                    alphaNew2 += M_PI;
+                }else if(fsNewPoint2.z > 0 && fsNewPoint2.x < 0){
+                    alphaNew2 -= M_PI;
+                }
+                fsNewPoint2.z = (float)sin(alphaNew2)*hypotenuse2;
+                fsNewPoint2.x = (float)cos(alphaNew2)*hypotenuse2;
+
+                if(fsNewPoint2.y>lowerLimit+0.5 && hypotenuse2 < 7){ //eliminate points from the grounds, that are not part of the model
+                    //qDebug("adding point");
+                    if(x<CAM_IMAGE_WIDTH/2 && laser2->getEnabled())
+                        model->addPointToPointCloud(fsNewPoint2);
                 }
                 break;
             }
@@ -410,7 +462,10 @@ void FSVision::putPointsFromFrameToCloud(
     }
 }
 
-FSPoint FSVision::detectLaserLine( cv::Mat &laserOff, cv::Mat &laserOn, unsigned int threshold )
+// 0 - same as 1 laser
+// 1 - right laser
+// 2 - left laser
+FSPoint FSVision::detectLaserLine( cv::Mat &laserOff, cv::Mat &laserOn, unsigned int threshold, int laser )
 {
     unsigned int cols = laserOff.cols;
     unsigned int rows = laserOff.rows;
@@ -437,6 +492,22 @@ FSPoint FSVision::detectLaserLine( cv::Mat &laserOff, cv::Mat &laserOn, unsigned
                      minLength,
                      maxGap );
 
+    cv::Mat laserHoughLines( rows,cols,CV_8UC3,cv::Scalar(0) );
+    cv::cvtColor(laserLineBW, laserHoughLines, CV_GRAY2RGB); //convert to color
+    for(int i=0;i<lines.size();i++){
+        cv::Point p1;
+        cv::Point p2;
+        p1.x = lines[i][0];
+        p1.y = lines[i][1];
+        p2.x = lines[i][2];
+        p2.y = lines[i][3];
+        cv::line(laserHoughLines, p1, p2, CV_RGB( 255,0,0 ),1);   //draw Hough line
+    }
+    cv::namedWindow("Detected Lines with HoughP");
+    cv::imshow("Detected Lines with HoughP",laserHoughLines);
+    cv::waitKey(0);
+    cvDestroyWindow("Detected Lines with HoughP");
+
     //should at least detect the laser line
     qDebug() << "detected"<<lines.size()<<"lines";
     if(lines.size()==0){
@@ -449,13 +520,35 @@ FSPoint FSVision::detectLaserLine( cv::Mat &laserOff, cv::Mat &laserOn, unsigned
     cv::Point p1;
     cv::Point p2;
     for(int i=0;i<lines.size();i++){
-        qDebug() << "drawing line "<<lines[i][0]<<lines[i][1]<<lines[i][2]<<lines[i][3];
-        //int i = 0;
-        p1.x = lines[i][0];
-        p1.y = lines[i][1];
-        p2.x = lines[i][2];
-        p2.y = lines[i][3];
-        cv::line(laserLine, p1, p2, CV_RGB( 255,0,0 ),1);   //draw laser line
+        if(laser == 0) { // 1 laser
+            qDebug() << "drawing line "<<lines[i][0]<<lines[i][1]<<lines[i][2]<<lines[i][3];
+            //int i = 0;
+            p1.x = lines[i][0];
+            p1.y = lines[i][1];
+            p2.x = lines[i][2];
+            p2.y = lines[i][3];
+            cv::line(laserLine, p1, p2, CV_RGB( 255,0,0 ),1);   //draw laser line
+        } else {
+            if(laser == 1 && lines[i][0] < CAM_IMAGE_WIDTH/2 && lines[i][2] < CAM_IMAGE_WIDTH/2) { // right laser - left line
+                qDebug() << "drawing line "<<lines[i][0]<<lines[i][1]<<lines[i][2]<<lines[i][3];
+                //int i = 0;
+                p1.x = lines[i][0];
+                p1.y = lines[i][1];
+                p2.x = lines[i][2];
+                p2.y = lines[i][3];
+                cv::line(laserLine, p1, p2, CV_RGB( 255,0,0 ),1);   //draw laser line
+            }
+
+            if(laser == 2 && lines[i][0] > CAM_IMAGE_WIDTH/2 && lines[i][2] > CAM_IMAGE_WIDTH/2) { // left laser - right line
+                qDebug() << "drawing line "<<lines[i][0]<<lines[i][1]<<lines[i][2]<<lines[i][3];
+                //int i = 0;
+                p1.x = lines[i][0];
+                p1.y = lines[i][1];
+                p2.x = lines[i][2];
+                p2.y = lines[i][3];
+                cv::line(laserLine, p1, p2, CV_RGB( 255,0,0 ),1);   //draw laser line
+            }
+        }
      }
 
 

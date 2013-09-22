@@ -14,8 +14,8 @@ TEMPLATE = app
 CONFIG += precompile_header
 PRECOMPILED_HEADER = staticHeaders.h
 
-include(qextserialport/src/qextserialport.pri)
-#include(qextserialport-1.2beta2/src/qextserialport.pri)
+#include(qextserialport/src/qextserialport.pri)
+include(qextserialport-1.2beta2/src/qextserialport.pri)
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -229,5 +229,5 @@ win32 {
         boost_timer-vc90-mt-1_50.lib \
         boost_unit_test_framework-vc90-mt-1_50.lib \
         boost_wave-vc90-mt-1_50.lib \
-        boost_wserialization-vc90-mt-1_50.lib \
+        boost_wserialization-vc90-mt-1_50.lib
 }

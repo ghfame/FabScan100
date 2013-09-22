@@ -35,6 +35,7 @@ class FSController
         FSWebCam* webcam;
         FSTurntable* turntable;
         FSLaser* laser;
+        FSLaser* laser2;
         FSVision* vision;
 
         //Singleton Pattern
@@ -57,6 +58,9 @@ class FSController
         double laserSwipeMin;
         double laserSwipeMax;
         double laserStepSize;
+        double laserSwipeMin2;
+        double laserSwipeMax2;
+        double laserStepSize2;
         double turntableStepSize;
         double yDpi;
 

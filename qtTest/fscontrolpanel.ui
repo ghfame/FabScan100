@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
-    <height>485</height>
+    <width>776</width>
+    <height>516</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -34,7 +34,7 @@
      <x>10</x>
      <y>120</y>
      <width>121</width>
-     <height>190</height>
+     <height>241</height>
     </rect>
    </property>
    <property name="title">
@@ -82,23 +82,29 @@
    <widget class="QCheckBox" name="laserEnable">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>130</y>
-      <width>70</width>
+      <x>10</x>
+      <y>110</y>
+      <width>101</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable laser 1 (right)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
      <string>Enabled</string>
     </property>
    </widget>
    <widget class="QPushButton" name="laserStepLeftButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
-      <width>51</width>
-      <height>32</height>
+      <y>130</y>
+      <width>21</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -106,12 +112,15 @@
     </property>
    </widget>
    <widget class="QPushButton" name="laserStepRightButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>80</y>
-      <width>50</width>
-      <height>32</height>
+      <x>90</x>
+      <y>130</y>
+      <width>20</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -122,41 +131,156 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>90</y>
       <width>101</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Laser 1 angle (right)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="text">
-     <string>Angle:</string>
+     <string>Angle   :</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="laserSwipeMaxEdit">
+   <widget class="QLabel" name="laserAngle_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>160</y>
-      <width>40</width>
-      <height>21</height>
+      <y>170</y>
+      <width>101</width>
+      <height>20</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Laser 2 angle (left)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Angle 2:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="laserEnable_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable laser 2 (left)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Enabled 2</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="laserSwipeMinEdit">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>160</y>
-      <width>40</width>
+      <x>30</x>
+      <y>130</y>
+      <width>31</width>
       <height>21</height>
      </rect>
     </property>
    </widget>
+   <widget class="QLineEdit" name="laserSwipeMaxEdit">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>130</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="laserSwipeMaxEdit_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>210</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="laserSwipeMinEdit_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>210</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="laserStepRightButton_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>210</y>
+      <width>20</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="laserStepLeftButton_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </widget>
+   <zorder>laserOnButton</zorder>
+   <zorder>laserOffButton</zorder>
+   <zorder>autoResetButton</zorder>
+   <zorder>laserEnable</zorder>
+   <zorder>laserStepLeftButton</zorder>
+   <zorder>laserStepRightButton</zorder>
+   <zorder>laserAngle</zorder>
+   <zorder>laserAngle_2</zorder>
+   <zorder>laserEnable_2</zorder>
+   <zorder>laserSwipeMinEdit</zorder>
+   <zorder>laserSwipeMaxEdit</zorder>
+   <zorder>groupBox_2</zorder>
+   <zorder>laserSwipeMaxEdit_2</zorder>
+   <zorder>laserSwipeMinEdit_2</zorder>
+   <zorder>laserStepRightButton_2</zorder>
+   <zorder>laserStepLeftButton_2</zorder>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>320</y>
+     <y>360</y>
      <width>121</width>
      <height>140</height>
     </rect>
@@ -303,14 +427,15 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
+   <zorder>cameraLabel</zorder>
   </widget>
   <widget class="QLabel" name="cameraLabel">
    <property name="geometry">
     <rect>
      <x>140</x>
      <y>20</y>
-     <width>600</width>
-     <height>450</height>
+     <width>621</width>
+     <height>481</height>
     </rect>
    </property>
    <property name="autoFillBackground">

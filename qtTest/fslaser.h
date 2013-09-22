@@ -10,10 +10,13 @@ private:
     FSPoint rotation; //the current rotation of the turntable
     double direction; //in which direction is the table turning, left or right
     FSPoint position;
+    bool enabled;    // laser enabled
+    bool right;      // right laser
 
 public:
     double degreesPerStep; //the stepper performs step of a certain number of degrees
     FSLaser();
+    FSLaser(bool r);
 
     void turnOn();
     void turnOff();
@@ -37,6 +40,11 @@ public:
     FSPoint getLaserPointPosition(void);
 
     FSPoint getPosition(void);
+
+    bool getEnabled();
+
+    void setRight(bool r);
+    bool getRight();
 
 };
 

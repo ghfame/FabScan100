@@ -17,6 +17,7 @@ public:
     ~FSControlPanel();
     Ui::FSControlPanel *ui;
     void setLaserAngleText(double angle);
+    void setLaser2AngleText(double angle);
 
 private slots:
     void on_fetchFrameButton_clicked();
@@ -46,6 +47,16 @@ private slots:
     void on_laserSwipeMinEdit_returnPressed();
 
     void on_pushButton_2_clicked();
+
+    void on_laserEnable_2_stateChanged(int arg1);
+
+    void on_laserStepLeftButton_2_clicked();
+
+    void on_laserStepRightButton_2_clicked();
+
+    void on_laserSwipeMaxEdit_2_returnPressed();
+
+    void on_laserSwipeMinEdit_2_returnPressed();
 };
 
 #endif // FSCONTROLPANEL_H

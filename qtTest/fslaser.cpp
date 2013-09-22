@@ -11,6 +11,18 @@ FSLaser::FSLaser()
     rotation = FSMakePoint(0.0f, 0.0f, 0.0f);
     position = FSMakePoint(LASER_POS_X, LASER_POS_Y, LASER_POS_Z);
     //FSController::getInstance()->controlPanel->setLaserSwipeMaxEditText(rotation.y);
+    enabled = false;
+    right = true;
+}
+
+FSLaser::FSLaser(bool r)
+{
+    if ( r ) {
+
+    } else {
+        position = FSMakePoint(LASER2_POS_X, LASER2_POS_Y, LASER2_POS_Z);
+        right = false;
+    }
 }
 
 void FSLaser::selectStepper()
@@ -98,12 +110,14 @@ void FSLaser::enable(void)
 {
     this->selectStepper();
     FSController::getInstance()->serial->writeChar(MC_TURN_STEPPER_ON);
+    enabled  = true;
 }
 
 void FSLaser::disable(void)
 {
     this->selectStepper();
     FSController::getInstance()->serial->writeChar(MC_TURN_STEPPER_OFF);
+    enabled = false;
 }
 
 void FSLaser::setLaserPointPosition(FSPoint p)
@@ -111,9 +125,18 @@ void FSLaser::setLaserPointPosition(FSPoint p)
     laserPointPosition = p;
     double b = position.x - laserPointPosition.x;
     double a = position.z - laserPointPosition.z;
-    rotation.y = atan(b/a)*180.0/M_PI;
+    if(right) {
+        rotation.y = atan(b/a)*180.0/M_PI;
+    } else {
+        rotation.y = 360 - atan(b/a)*180.0/M_PI;
+    }
     qDebug() << "Current laser angle: "<<rotation.y;
-    FSController::getInstance()->controlPanel->setLaserAngleText(rotation.y);
+    if(right) {
+        FSController::getInstance()->controlPanel->setLaserAngleText(rotation.y);
+    } else {
+        FSController::getInstance()->controlPanel->setLaser2AngleText(rotation.y);
+    }
+
 }
 
 FSPoint FSLaser::getLaserPointPosition(void)
@@ -129,4 +152,20 @@ FSPoint FSLaser::getPosition()
 FSPoint FSLaser::getRotation()
 {
     return rotation;
+}
+
+bool FSLaser::getEnabled()
+{
+    return enabled;
+}
+
+
+void FSLaser::setRight(bool r)
+{
+    right = r;
+}
+
+bool FSLaser::getRight()
+{
+    return right;
 }

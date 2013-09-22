@@ -22,7 +22,7 @@ public:
             int dpiVertical,
             FSFloat lowerLimit);
 
-    static FSPoint detectLaserLine(cv::Mat &laserOff, cv::Mat &laserOn, unsigned int threshold);
+    static FSPoint detectLaserLine(cv::Mat &laserOff, cv::Mat &laserOn, unsigned int threshold, int laser);
     static cv::Mat histogram(cv::Mat &img);
 };
 
