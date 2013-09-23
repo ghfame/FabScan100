@@ -35,9 +35,10 @@ FSLaser::FSLaser(bool r)
 
 void FSLaser::selectStepper()
 {
-    char c[2];
+    char c[3];
     c[0] = MC_SELECT_STEPPER;
     c[1] = MC_LASER_STEPPER;
+    c[2] = 0;
     FSController::getInstance()->serial->writeChars(c);
 }
 
@@ -59,6 +60,7 @@ void FSLaser::turnNumberOfSteps(unsigned int steps)
 ///    char c[size];
     char c[1024];
     unsigned int s = steps;
+    memset(&c[0],0,1024); //zero it
     for(unsigned int i=0; i<=(steps/256); i++){
         c[2*i]=MC_PERFORM_STEP;
         if(s<256){
@@ -68,7 +70,7 @@ void FSLaser::turnNumberOfSteps(unsigned int steps)
             s-=255;
         }
     }
-    FSController::getInstance()->serial->writeChars(c);
+///    FSController::getInstance()->serial->writeChars(c);
     laserPointPosition.x = position.x - tan(rotation.y*M_PI/180)*position.z;
     qDebug() << "LaserPositionX"<< laserPointPosition.x;
 }
@@ -110,7 +112,7 @@ void FSLaser::setDirection(FSDirection d)
     this->selectStepper();
     direction = d;
     char c = (d==FS_DIRECTION_CW)?MC_SET_DIRECTION_CW:MC_SET_DIRECTION_CCW;
-    FSController::getInstance()->serial->writeChar(c);
+///    FSController::getInstance()->serial->writeChar(c);
 }
 
 void FSLaser::toggleDirection(){
@@ -121,14 +123,14 @@ void FSLaser::toggleDirection(){
 void FSLaser::enable(void)
 {
     this->selectStepper();
-    FSController::getInstance()->serial->writeChar(MC_TURN_STEPPER_ON);
+///    FSController::getInstance()->serial->writeChar(MC_TURN_STEPPER_ON);
     enabled  = true;
 }
 
 void FSLaser::disable(void)
 {
     this->selectStepper();
-    FSController::getInstance()->serial->writeChar(MC_TURN_STEPPER_OFF);
+///    FSController::getInstance()->serial->writeChar(MC_TURN_STEPPER_OFF);
     enabled = false;
 }
 

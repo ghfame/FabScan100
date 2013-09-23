@@ -15,6 +15,7 @@ void FSTurntable::turnNumberOfSteps(unsigned int steps)
 ///    char c[size];
     char c[1024];
     unsigned int s = steps;
+    memset(&c[0],0,1024); //zero it
     for(unsigned int i=0; i<=steps/256; i++){
         c[2*i]=MC_PERFORM_STEP;
         if(s<256){
@@ -54,9 +55,10 @@ void FSTurntable::toggleDirection(){
 
 void FSTurntable::selectStepper()
 {
-    char c[2];
+    char c[3];
     c[0] = MC_SELECT_STEPPER;
     c[1] = MC_TURNTABLE_STEPPER;
+    c[2] =0;
     FSController::getInstance()->serial->writeChars(c);
 }
 
